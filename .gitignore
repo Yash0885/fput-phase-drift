@@ -1,0 +1,18 @@
+# MATLAB autosaves
+*.asv
+*.m~
+*.mex*
+*.mat
+
+# macOS junk
+.DS_Store
+
+# editor folders
+.vscode/
+.idea/
+
+# outputs
+figs/*
+output/*
+data/*
+*.log
