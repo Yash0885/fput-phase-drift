@@ -1,5 +1,3 @@
-addpath(fullfile(fileparts(mfilename('fullpath')), '..', 'src'))
-
 % validate_time_step.m
 %
 % Time-step sensitivity test.
@@ -8,6 +6,7 @@ addpath(fullfile(fileparts(mfilename('fullpath')), '..', 'src'))
 
 clear;
 clc;
+addpath(fullfile(fileparts(mfilename('fullpath')), '..', 'src'))
 
 %% fixed problem parameters
 
