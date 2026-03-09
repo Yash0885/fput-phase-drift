@@ -1,5 +1,3 @@
-addpath(fullfile(fileparts(mfilename('fullpath')), '..', 'src'))
-
 % validate_repeats.m
 %
 % Repeated-domain sensitivity test.
@@ -8,6 +6,7 @@ addpath(fullfile(fileparts(mfilename('fullpath')), '..', 'src'))
 
 clear;
 clc;
+addpath(fullfile(fileparts(mfilename('fullpath')), '..', 'src'))
 
 %% fixed problem parameters
 
