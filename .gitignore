@@ -1,8 +1,13 @@
-# MATLAB autosaves
+# MATLAB temporary files
 *.asv
 *.m~
+*.autosave
 *.mex*
+*.log
+
+# MATLAB outputs from experiments
 *.mat
+*.csv
 
 # macOS junk
 .DS_Store
@@ -11,8 +16,10 @@
 .vscode/
 .idea/
 
-# outputs
-figs/*
+# optional output folders
 output/*
 data/*
-*.log
+
+# figures generated during runs
+figures/*.png
+figures/*.pdf
