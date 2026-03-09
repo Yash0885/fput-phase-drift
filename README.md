@@ -1,4 +1,4 @@
-![phase drift signal](figures/phase_drift_signal.png)
+![phase drift signal](figures/phase_shift_vs_time.png)
 
 # Phase Drift in Long-Time Symplectic Simulation of an FPUT-beta Traveling Wave
 
