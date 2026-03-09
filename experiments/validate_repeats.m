@@ -1,3 +1,5 @@
+addpath(fullfile(fileparts(mfilename('fullpath')), '..', 'src'))
+
 % validate_repeats.m
 %
 % Repeated-domain sensitivity test.
