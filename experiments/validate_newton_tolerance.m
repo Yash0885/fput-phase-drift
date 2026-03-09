@@ -1,3 +1,5 @@
+addpath(fullfile(fileparts(mfilename('fullpath')), '..', 'src'))
+
 % validate_newton_tolerance.m
 %
 % Traveling-wave solve sensitivity test.
