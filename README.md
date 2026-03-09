@@ -1,17 +1,20 @@
 ![phase drift signal](figures/phase_shift_vs_time.png)
 
+Example phase shift signal extracted from the simulation.  
+The approximately linear growth indicates a small propagation speed mismatch.
+
 # Phase Drift in Long-Time Symplectic Simulation of an FPUT-beta Traveling Wave
 
 This repository contains a computational experiment studying phase drift in long-time symplectic simulations of a traveling wave in the periodic Fermi-Pasta-Ulam-Tsingou (FPUT-beta) lattice.
 
 The goal of the experiment is to understand why numerical error appears to grow in long-time simulations of traveling waves.
 
-Two possibilities are considered:
+Two possible explanations are considered:
 
 1. genuine deformation of the waveform
 2. accumulated phase drift caused by a small propagation-speed mismatch
 
-The numerical evidence suggests that most of the observed error growth is caused by phase drift rather than instability of the waveform.
+The numerical evidence indicates that most of the observed error growth is caused by phase drift rather than instability of the waveform.
 
 ---
 
@@ -41,7 +44,7 @@ A traveling-wave-like profile is computed using
 - Newton continuation
 - a discrete traveling-wave residual equation
 
-Parameters used:
+Parameters used in the experiment:
 
 L = 16  
 k = pi / 16  
@@ -55,7 +58,7 @@ where
 
 c0 = sqrt(2*(1 - cos(k))) / k
 
-The base wave profile is repeated several times to create the full lattice used in time integration.
+The base wave profile is repeated several times to create the full lattice used for time integration.
 
 ---
 
@@ -63,7 +66,7 @@ The base wave profile is repeated several times to create the full lattice used 
 
 The system is integrated using the velocity-Verlet (Stormer-Verlet) symplectic method.
 
-Typical parameters:
+Typical parameters used in the simulations:
 
 dt = 0.01  
 simulation length about 1000 wave periods  
@@ -88,9 +91,9 @@ Sub-grid translations are implemented using FFT interpolation.
 Phase drift estimate  
 The shift signal is
 
-1. unwrapped
-2. corrected by subtracting the expected translation
-3. fit using linear regression
+1. unwrapped  
+2. corrected by subtracting the expected translation  
+3. fit using linear regression  
 
 to estimate a drift rate Delta c.
 
@@ -105,7 +108,7 @@ and remains nearly conserved throughout the simulation.
 
 # Observed behavior
 
-The simulations show the following:
+The simulations show the following behavior:
 
 - Direct L2 error grows roughly linearly in time
 - After optimal translation alignment, waveform error remains small
@@ -147,9 +150,9 @@ The figures directory stores generated plots.
 
 From MATLAB, run the validation scripts
 
-validate_time_step
-validate_repeats
-validate_newton_tolerance
+validate_time_step  
+validate_repeats  
+validate_newton_tolerance  
 
 Then generate the figures
 
@@ -161,4 +164,5 @@ The scripts will reuse saved results if they already exist.
 
 # Notes
 
-This repository is meant to document a reproducible numerical experiment rather than a polished software package. The emphasis is on clear numerical diagnostics and interpretation of the results.
+This repository documents a reproducible numerical experiment rather than a polished software package.  
+The emphasis is on clear numerical diagnostics and interpretation of the results.
