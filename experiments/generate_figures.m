@@ -1,5 +1,3 @@
-addpath(fullfile(fileparts(mfilename('fullpath')), '..', 'src'))
-
 % generate_figures.m
 %
 % Generate the main figures for the phase-drift study.
@@ -8,6 +6,7 @@ addpath(fullfile(fileparts(mfilename('fullpath')), '..', 'src'))
 
 clear;
 clc;
+addpath(fullfile(fileparts(mfilename('fullpath')), '..', 'src'))
 
 figdir = fullfile(pwd, 'figures');
 
