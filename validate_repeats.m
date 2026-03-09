@@ -1,0 +1,136 @@
+% validate_repeats.m
+%
+% Repeated-domain sensitivity test.
+%
+% Build the traveling wave once, then vary n_repeats.
+
+clear;
+clc;
+
+%% fixed problem parameters
+
+params.sh_target = 2e-2;
+params.L         = 16;
+params.k         = pi/16;
+params.n_periods = 1000;
+params.dx        = 1.0;
+
+params.dt        = 1.25e-3;
+params.M         = 4;
+params.align_tol = 1e-10;
+
+params.phip = @(s) s + s.^3;
+params.Phi  = @(s) 0.5*s.^2 + 0.25*s.^4;
+
+params.newton_tol   = [1e-12, 1e-8];
+params.newton_parms = [40, 40, 0.9, 3, 20];
+
+repeats_list = [1, 3, 5, 7];
+
+%% build traveling wave once
+
+% reuse the same base wave across the repeated-domain sweep
+params.n_repeats = repeats_list(1);
+tw = build_traveling_wave_frac(params);
+
+%% run sweep
+
+outs = struct([]);
+
+for i = 1:numel(repeats_list)
+
+    params.n_repeats = repeats_list(i);
+
+    fprintf('\n=== validate_repeats: n_repeats = %d ===\n', params.n_repeats);
+
+    out = run_phase_drift_from_tw_frac(tw, params);
+
+    if i == 1
+        outs = out;
+    else
+        % keep a consistent field order across runs
+        outs(i) = orderfields(out, outs(1));
+    end
+end
+
+%% summary table
+
+T = build_summary_table(outs);
+
+%% save
+
+save('validate_repeats_results.mat', 'outs', 'T', 'repeats_list', 'params');
+writetable(T, 'validate_repeats_results.csv');
+
+fprintf('\nWrote validate_repeats_results.mat\n');
+fprintf('Wrote validate_repeats_results.csv\n');
+
+fprintf('\nRepeated-domain sweep summary:\n');
+disp(T(:, {'n_repeats', 'delta_c_driftOnly', 'delta_c_se', 'delta_c_r2', ...
+           'tw_res_rel', 'E_align_max', 'E_direct_max', 'energy_rel_max'}));
+
+fprintf(['\nNote: direct error can become order one over long times because the wave\n' ...
+         'drifts far in phase relative to the fixed reference, even when the\n' ...
+         'aligned error remains small.\n\n']);
+
+%% local helper
+
+function T = build_summary_table(outs)
+
+summary_fields = { ...
+    'dt', ...
+    'n_repeats', ...
+    'M', ...
+    'align_tol', ...
+    'c_ref', ...
+    'tw_res_rel', ...
+    'nsoli_ierr', ...
+    'delta_c_raw', ...
+    'delta_c_driftOnly', ...
+    'delta_c_raw_se', ...
+    'delta_c_raw_r2', ...
+    'delta_c_se', ...
+    'delta_c_r2', ...
+    'delta_c_first_half_raw', ...
+    'delta_c_second_half_raw', ...
+    'delta_c_first_half_driftOnly', ...
+    'delta_c_second_half_driftOnly', ...
+    'corr_shift_Ealign_raw', ...
+    'corr_dshift_Ealign_raw', ...
+    'corr_shift_Ealign_driftOnly', ...
+    'corr_dshift_Ealign_driftOnly', ...
+    'E_align_max', ...
+    'E_direct_max', ...
+    'energy_rel_max', ...
+    'omega_max_eq', ...
+    'dt_omega_eq', ...
+    'dt_omega_eq_over_pi', ...
+    'omega_eff0', ...
+    'omega_eff_max', ...
+    'dt_omega_eff0', ...
+    'dt_omega_eff_max', ...
+    'dt_omega_eff0_over_pi', ...
+    'dt_omega_eff_max_over_pi', ...
+    'T_period', ...
+    'steps', ...
+    'store_every', ...
+    'dt_sample' ...
+    };
+
+rows = repmat(struct(), numel(outs), 1);
+
+for j = 1:numel(outs)
+    for k = 1:numel(summary_fields)
+        f = summary_fields{k};
+        if isfield(outs(j), f)
+            rows(j).(f) = outs(j).(f);
+        else
+            % keep missing diagnostics explicit in the table
+            rows(j).(f) = NaN;
+        end
+    end
+end
+
+T = struct2table(rows);
+
+end
