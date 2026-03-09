@@ -3,16 +3,16 @@
 Example phase shift signal extracted from the simulation.  
 The approximately linear growth indicates a small propagation speed mismatch.
 
-# Phase Drift in Long-Time Symplectic Simulation of an FPUT-beta Traveling Wave
+# Phase drift in long-time symplectic simulation of an FPUT-beta traveling wave
 
-This repository contains a computational experiment studying phase drift in long-time symplectic simulations of a traveling wave in the periodic Fermi-Pasta-Ulam-Tsingou (FPUT-beta) lattice.
+This repository contains a small reproducible numerical experiment demonstrating phase drift in long-time symplectic simulations of a traveling wave in the periodic Fermi-Pasta-Ulam-Tsingou (FPUT-beta) lattice.
 
 The goal of the experiment is to understand why numerical error appears to grow in long-time simulations of traveling waves.
 
 Two possible explanations are considered:
 
-1. genuine deformation of the waveform
-2. accumulated phase drift caused by a small propagation-speed mismatch
+1. genuine deformation of the waveform  
+2. accumulated phase drift caused by a small propagation-speed mismatch  
 
 The numerical evidence indicates that most of the observed error growth is caused by phase drift rather than instability of the waveform.
 
@@ -40,9 +40,9 @@ with periodic boundary conditions.
 
 A traveling-wave-like profile is computed using
 
-- Fourier spectral discretization
-- Newton continuation
-- a discrete traveling-wave residual equation
+- Fourier spectral discretization  
+- Newton continuation  
+- a discrete traveling-wave residual equation  
 
 Parameters used in the experiment:
 
@@ -79,7 +79,7 @@ sampling rate = 4 samples per period
 Several diagnostics are recorded during the simulation.
 
 Direct waveform error  
-Relative L2 difference between the numerical state and the reference traveling-wave profile.
+Relative L2 difference between the numerical state and the reference traveling wave profile.
 
 Alignment-based error  
 For each sampled state the optimal spatial shift s(t) is computed by minimizing
@@ -110,12 +110,12 @@ and remains nearly conserved throughout the simulation.
 
 The simulations show the following behavior:
 
-- Direct L2 error grows roughly linearly in time
-- After optimal translation alignment, waveform error remains small
-- The optimal shift grows approximately linearly in time
-- Linear regression gives high R^2 values
-- Estimated drift rate Delta c is about 1e-5
-- Energy drift remains extremely small
+- Direct L2 error grows roughly linearly in time  
+- After optimal translation alignment, waveform error remains small  
+- The optimal shift grows approximately linearly in time  
+- Linear regression gives high R^2 values  
+- Estimated drift rate Delta c is about 1e-5  
+- Energy drift remains extremely small  
 
 These results suggest that the apparent error growth mainly reflects phase drift rather than deformation of the waveform.
 
@@ -148,7 +148,7 @@ The figures directory stores generated plots.
 
 # Reproducing the experiment
 
-From MATLAB, run the validation scripts
+From MATLAB run the validation scripts
 
 validate_time_step  
 validate_repeats  
@@ -159,6 +159,19 @@ Then generate the figures
 generate_figures
 
 The scripts will reuse saved results if they already exist.
+
+---
+
+# Running the experiment
+
+From MATLAB run:
+
+experiments/validate_time_step  
+experiments/validate_repeats  
+experiments/validate_newton_tolerance  
+experiments/generate_figures  
+
+This will reproduce the figures shown in the repository.
 
 ---
 
