@@ -1,20 +1,34 @@
 ![phase drift signal](figures/phase_shift_vs_time.png)
 
 Example phase shift signal extracted from the simulation.  
-The approximately linear growth indicates a small propagation speed mismatch.
+The approximately linear growth indicates a small propagation-speed mismatch.
 
 # Phase drift in long-time symplectic simulation of an FPUT-beta traveling wave
 
-This repository contains a small reproducible numerical experiment demonstrating phase drift in long-time symplectic simulations of a traveling wave in the periodic Fermi-Pasta-Ulam-Tsingou (FPUT-beta) lattice.
+This repository contains a small reproducible numerical experiment studying phase drift in long-time symplectic simulations of a traveling wave in the periodic Fermi-Pasta-Ulam-Tsingou (FPUT-beta) lattice.
 
-The goal of the experiment is to understand why numerical error appears to grow in long-time simulations of traveling waves.
-
-Two possible explanations are considered:
+The main question is why the numerical error appears to grow over long time intervals. In this experiment, two explanations are separated:
 
 1. genuine deformation of the waveform  
-2. accumulated phase drift caused by a small propagation-speed mismatch  
+2. accumulated phase drift caused by a small propagation-speed mismatch
 
-The numerical evidence indicates that most of the observed error growth is caused by phase drift rather than instability of the waveform.
+The numerical evidence suggests that most of the observed error growth in this setup is caused by phase drift rather than visible deformation of the waveform.
+
+---
+
+# Results at a glance
+
+The main diagnostic is to compare the numerical state against the reference wave before and after optimal spatial alignment.
+
+| Diagnostic | Observed behavior |
+|---|---|
+| Direct waveform error | Grows over long time because the wave drifts relative to the fixed reference |
+| Alignment-based error | Remains much smaller after correcting for translation |
+| Phase shift | Grows approximately linearly in time |
+| Drift estimate | Small, typically on the order of `1e-5` in the tested runs |
+| Energy drift | Remains very small under Störmer-Verlet time integration |
+
+The interpretation is that the dominant long-time error is a coherent phase error, not an immediate loss of waveform shape.
 
 ---
 
@@ -22,15 +36,21 @@ The numerical evidence indicates that most of the observed error growth is cause
 
 We study the periodic FPUT-beta lattice with bond potential
 
+```text
 phi(r) = 0.5 r^2 + 0.25 r^4
+```
 
 and force
 
+```text
 phi'(r) = r + r^3
+```
 
 The equations of motion are
 
+```text
 x_ddot_i = phi'(x_{i+1} - x_i) - phi'(x_i - x_{i-1})
+```
 
 with periodic boundary conditions.
 
@@ -40,23 +60,29 @@ with periodic boundary conditions.
 
 A traveling-wave-like profile is computed using
 
-- Fourier spectral discretization  
-- Newton continuation  
-- a discrete traveling-wave residual equation  
+- Fourier spectral discretization
+- Newton continuation
+- a discrete traveling-wave residual equation
 
-Parameters used in the experiment:
+Parameters used in the main experiment:
 
-L = 16  
-k = pi / 16  
-speed shift target = 0.02  
+```text
+L = 16
+k = pi / 16
+speed shift target = 0.02
+```
 
 The reference wave speed is
 
+```text
 c_ref = c0 + speed_shift
+```
 
 where
 
+```text
 c0 = sqrt(2*(1 - cos(k))) / k
+```
 
 The base wave profile is repeated several times to create the full lattice used for time integration.
 
@@ -64,13 +90,15 @@ The base wave profile is repeated several times to create the full lattice used 
 
 # Time integration
 
-The system is integrated using the velocity-Verlet (Stormer-Verlet) symplectic method.
+The system is integrated using the velocity-Verlet, or Störmer-Verlet, symplectic method.
 
 Typical parameters used in the simulations:
 
-dt = 0.01  
-simulation length about 1000 wave periods  
+```text
+dt = 0.01
+simulation length about 1000 wave periods
 sampling rate = 4 samples per period
+```
 
 ---
 
@@ -78,51 +106,41 @@ sampling rate = 4 samples per period
 
 Several diagnostics are recorded during the simulation.
 
-Direct waveform error  
-Relative L2 difference between the numerical state and the reference traveling wave profile.
+**Direct waveform error**  
+Relative L2 difference between the numerical state and the fixed reference traveling wave profile.
 
-Alignment-based error  
-For each sampled state the optimal spatial shift s(t) is computed by minimizing
+**Alignment-based error**  
+For each sampled state, the optimal spatial shift `s(t)` is computed by minimizing
 
+```text
 || u(x,t) - u0(x + s) ||_2
+```
 
 Sub-grid translations are implemented using FFT interpolation.
 
-Phase drift estimate  
+**Phase drift estimate**  
 The shift signal is
 
-1. unwrapped  
-2. corrected by subtracting the expected translation  
-3. fit using linear regression  
+1. unwrapped,
+2. corrected by subtracting the expected translation,
+3. fit using linear regression.
 
-to estimate a drift rate Delta c.
+The fitted slope gives an estimate of the drift rate `Delta c`.
 
-Energy drift  
+**Energy drift**  
 Energy is computed as
 
+```text
 H = sum(0.5 * v_i^2) + sum(phi(x_{i+1} - x_i))
+```
 
 and remains nearly conserved throughout the simulation.
 
 ---
 
-# Observed behavior
-
-The simulations show the following behavior:
-
-- Direct L2 error grows roughly linearly in time  
-- After optimal translation alignment, waveform error remains small  
-- The optimal shift grows approximately linearly in time  
-- Linear regression gives high R^2 values  
-- Estimated drift rate Delta c is about 1e-5  
-- Energy drift remains extremely small  
-
-These results suggest that the apparent error growth mainly reflects phase drift rather than deformation of the waveform.
-
----
-
 # Repository structure
 
+```text
 src/
     build_traveling_wave_frac.m
     run_phase_drift_from_tw_frac.m
@@ -139,43 +157,43 @@ figures/
 
 archive/
     earlier exploratory scripts
+```
 
-The src directory contains reusable functions.  
-The experiments directory contains scripts that run the numerical tests.  
-The figures directory stores generated plots.
+The `src` directory contains reusable functions.  
+The `experiments` directory contains scripts that run the numerical tests.  
+The `figures` directory stores generated plots.
 
 ---
 
 # Reproducing the experiment
 
-From MATLAB run the validation scripts
+From the repository root, run the following commands in MATLAB:
 
-validate_time_step  
-validate_repeats  
-validate_newton_tolerance  
+```matlab
+addpath('src')
+run('experiments/validate_time_step.m')
+run('experiments/validate_repeats.m')
+run('experiments/validate_newton_tolerance.m')
+run('experiments/generate_figures.m')
+```
 
-Then generate the figures
+The validation scripts write `.mat` and `.csv` result files. The figure-generation script reuses saved results if they already exist.
 
-generate_figures
+The expected output figures are:
 
-The scripts will reuse saved results if they already exist.
-
----
-
-# Running the experiment
-
-From MATLAB run:
-
-experiments/validate_time_step  
-experiments/validate_repeats  
-experiments/validate_newton_tolerance  
-experiments/generate_figures  
-
-This will reproduce the figures shown in the repository.
+```text
+figures/direct_vs_aligned_error.png
+figures/phase_shift_vs_time.png
+figures/energy_drift.png
+figures/drift_vs_dt.png
+figures/drift_vs_repeats.png
+figures/drift_vs_newton_tol.png
+```
 
 ---
 
-# Notes
+# Notes and limitations
 
-This repository documents a reproducible numerical experiment rather than a polished software package.  
-The emphasis is on clear numerical diagnostics and interpretation of the results.
+This repository documents a reproducible numerical experiment rather than a polished software package. The emphasis is on clear numerical diagnostics and interpretation of the results.
+
+The results should be read as evidence for this controlled FPUT-beta traveling-wave setup, not as a general theorem for all nonlinear lattices, amplitudes, or numerical methods. The main point is that translation alignment separates phase drift from waveform deformation in a useful and measurable way.
