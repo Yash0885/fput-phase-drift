@@ -152,6 +152,9 @@ experiments/
     validate_newton_tolerance.m
     generate_figures.m
 
+tests/
+    smoke_test.m
+
 figures/
     generated plots
 
@@ -161,6 +164,7 @@ archive/
 
 The `src` directory contains reusable functions.  
 The `experiments` directory contains scripts that run the numerical tests.  
+The `tests` directory contains lightweight checks for path and interface problems.  
 The `figures` directory stores generated plots.
 
 ---
@@ -189,6 +193,18 @@ figures/drift_vs_dt.png
 figures/drift_vs_repeats.png
 figures/drift_vs_newton_tol.png
 ```
+
+---
+
+# Smoke test
+
+A small smoke test is included for checking that the main MATLAB functions still run together on a short problem:
+
+```matlab
+run('tests/smoke_test.m')
+```
+
+This test is meant to catch basic path or interface issues. It is not a replacement for the longer validation sweeps in `experiments`.
 
 ---
 
