@@ -18,12 +18,12 @@ The numerical evidence suggests that most of the observed error growth in this s
 
 # Results at a glance
 
-The main diagnostic is to compare the numerical state against the reference wave before and after optimal spatial alignment.
+The main diagnostic is to compare the numerical displacement profile against the reference wave before and after optimal spatial alignment.
 
 | Diagnostic | Observed behavior |
 |---|---|
 | Direct waveform error | Grows over long time because the wave drifts relative to the fixed reference |
-| Alignment-based error | Remains much smaller after correcting for translation |
+| Alignment-based waveform error | Remains much smaller after correcting for translation |
 | Phase shift | Grows approximately linearly in time |
 | Drift estimate | Small, typically on the order of `1e-5` in the tested runs |
 | Energy drift | Remains very small under Störmer-Verlet time integration |
@@ -92,11 +92,12 @@ The base wave profile is repeated several times to create the full lattice used 
 
 The system is integrated using the velocity-Verlet, or Störmer-Verlet, symplectic method.
 
-Typical parameters used in the simulations:
+Parameters used across the repo include:
 
 ```text
-dt = 0.01
-simulation length about 1000 wave periods
+smoke-test dt = 0.01
+time-step validation dt = 5e-3, 2.5e-3, 1.25e-3, 6.25e-4
+simulation length about 1000 wave periods for validation runs
 sampling rate = 4 samples per period
 ```
 
@@ -107,10 +108,10 @@ sampling rate = 4 samples per period
 Several diagnostics are recorded during the simulation.
 
 **Direct waveform error**  
-Relative L2 difference between the numerical state and the fixed reference traveling wave profile.
+Relative L2 difference between the numerical displacement profile and the fixed reference traveling wave profile.
 
 **Alignment-based error**  
-For each sampled state, the optimal spatial shift `s(t)` is computed by minimizing
+For each sampled displacement profile, the optimal spatial shift `s(t)` is computed by minimizing
 
 ```text
 || u(x,t) - u0(x + s) ||_2
@@ -125,7 +126,7 @@ The shift signal is
 2. corrected by subtracting the expected translation,
 3. fit using linear regression.
 
-The fitted slope gives an estimate of the drift rate `Delta c`.
+The fitted slope gives a drift-rate estimate in this alignment-shift convention. Its sign depends on the convention used for the spatial shift, so it should be interpreted as the measured coherent phase-drift rate rather than a separately derived wave speed.
 
 **Energy drift**  
 Energy is computed as
