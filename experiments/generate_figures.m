@@ -6,7 +6,8 @@
 
 clear;
 clc;
-addpath(fullfile(fileparts(mfilename('fullpath')), '..', 'src'))
+script_dir = fileparts(mfilename('fullpath'));
+addpath(fullfile(script_dir, '..', 'src'))
 
 figdir = fullfile(pwd, 'figures');
 
@@ -21,21 +22,21 @@ end
 
 if ~isfile('validate_time_step_results.mat')
     fprintf('validate_time_step_results.mat not found -- running validate_time_step\n');
-    validate_time_step
+    run(fullfile(script_dir, 'validate_time_step.m'))
 else
     fprintf('Loading existing validate_time_step_results.mat\n');
 end
 
 if ~isfile('validate_repeats_results.mat')
     fprintf('validate_repeats_results.mat not found -- running validate_repeats\n');
-    validate_repeats
+    run(fullfile(script_dir, 'validate_repeats.m'))
 else
     fprintf('Loading existing validate_repeats_results.mat\n');
 end
 
 if ~isfile('validate_newton_tolerance_results.mat')
     fprintf('validate_newton_tolerance_results.mat not found -- running validate_newton_tolerance\n');
-    validate_newton_tolerance
+    run(fullfile(script_dir, 'validate_newton_tolerance.m'))
 else
     fprintf('Loading existing validate_newton_tolerance_results.mat\n');
 end
