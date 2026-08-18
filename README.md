@@ -209,6 +209,14 @@ This test is meant to catch basic path or interface issues. It is not a replacem
 
 ---
 
+# Attribution and scope
+
+`src/nsoli.m` is a third-party Newton-Krylov solver by C. T. Kelley; the original source header, dated April 27, 2001, is preserved in the file.
+
+This repository is intentionally limited to the phase-drift experiment described above. It does not attempt to package every related FPUT calculation or collaborative research note.
+
+---
+
 # Notes and limitations
 
 This repository documents a reproducible numerical experiment rather than a polished software package. The emphasis is on clear numerical diagnostics and interpretation of the results.
