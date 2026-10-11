@@ -222,3 +222,9 @@ The results should be read as evidence for this controlled FPUT-beta traveling-w
 # Third-party code
 
 `src/nsoli.m` is C. T. Kelley's Newton-Krylov solver from *Solving Nonlinear Equations with Newton's Method* (SIAM, 2003). It is used for the Newton solves in the traveling-wave construction. The file is included as-is and is not covered by the MIT license in this repository.
+
+---
+
+# Acknowledgements
+
+Thanks to Patrick Sprenger for guidance on this project.
