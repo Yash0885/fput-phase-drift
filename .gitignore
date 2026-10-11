@@ -20,6 +20,5 @@
 output/*
 data/*
 
-# figures generated during runs
-figures/*.png
+# the png figures used in the README are tracked
 figures/*.pdf
