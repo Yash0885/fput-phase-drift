@@ -214,3 +214,9 @@ This test is meant to catch basic path or interface issues. It is not a replacem
 This repository documents a reproducible numerical experiment rather than a polished software package. The emphasis is on clear numerical diagnostics and interpretation of the results.
 
 The results should be read as evidence for this controlled FPUT-beta traveling-wave setup, not as a general theorem for all nonlinear lattices, amplitudes, or numerical methods. The main point is that translation alignment separates phase drift from waveform deformation in a useful and measurable way.
+
+---
+
+# Third-party code
+
+`src/nsoli.m` is C. T. Kelley's Newton-Krylov solver from *Solving Nonlinear Equations with Newton's Method* (SIAM, 2003). It is used for the Newton solves in the traveling-wave construction. The file is included as-is and is not covered by the MIT license in this repository.
