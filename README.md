@@ -184,6 +184,8 @@ run('experiments/generate_figures.m')
 
 The validation scripts write `.mat` and `.csv` result files. The figure-generation script reuses saved results if they already exist.
 
+The code was developed in MATLAB R2025a and uses only base MATLAB. No toolboxes are needed.
+
 The expected output figures are:
 
 ```text
